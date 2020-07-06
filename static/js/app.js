@@ -42,38 +42,95 @@ function barBubbleDemo(id) {
         var wash_values =  bellyButton.metadata.filter(s => s.id.toString() === id)[0];
         var wfreq =  wash_values.wfreq
         
-        // Bonus gauge chart, not right but close
-        var data2 = [
-            {
-              type: "indicator",
-              mode: "gauge+number",
-              value: wfreq,
-              title: { text: "<b>Belly Button Washing Frequency</b><br>Scrubs per Week", font: { size: 24 } },
-              gauge: {
-                axis: { range: [null, 9], tickwidth: 1, dtick: 1},
-                bar: { color: "red", thickness: .1 },
-                steps: [
-                  { range: [0, 1], color: 'rgb(255, 255, 229)'},
-                  { range: [1, 2], color: "rgb(247, 252, 185)" },
-                  { range: [2, 3], color: "rgb(255, 255, 229)" },
-                  { range: [3, 4], color: "rgb(217, 240, 163)" },
-                  { range: [4, 5], color: "rgb(173, 221, 142)" },
-                  { range: [5, 6], color: "rgb(120, 198, 121)" },
-                  { range: [6, 7], color: "rgb(65, 171, 93)" },
-                  { range: [7, 8], color: "rgb(35, 132, 67)" },
-                  { range: [8, 9], color: "rgb(0, 104, 55)"},
-                ],
-              }
+        // Bonus gauge chart. (the needle is off by just a little bit)
+        var degrees = 180-(wfreq*20);
+        //alert(degrees);
+            radius = .5;
+        var radians = degrees * Math.PI / 180;
+        var x = radius * Math.cos(radians);
+        var y = radius * Math.sin(radians);
+        
+        var path1 = (degrees < 45 || degrees > 135) ? 'M -0.0 -0.025 L 0.0 0.025 L ' : 'M -0.025 -0.0 L 0.025 0.0 L ';
+        var mainPath = path1,
+            pathX = String(x),
+            space = ' ',
+            pathY = String(y),
+            pathEnd = ' Z';
+        var path = mainPath.concat(pathX,space,pathY,pathEnd);
+
+        var data2 = [{ type: 'scatter',
+        x: [0], y:[0],
+            marker: {size: 14, color:'850000'},
+            showlegend: false,
+            name: 'Washing Frequency',
+            text: wfreq,},
+        {  values: [ 1,1,1,1,1,1,1,1,1,9],
+        rotation: 90,
+        direction: "clockwise",       
+        text: ['0-1','1-2','2-3','3-4','4-5','5-6','6-7','7-8','8-9'],
+        textinfo: 'text',
+        textposition:'inside',      
+        marker: {colors:['rgb(255, 255, 299,)', 'rgb(247, 252, 185)',
+                                'rgb(217, 240, 163)', 'rgb(202, 209, 95)',
+                                'rgb(173, 221, 142)', 'rgb(120, 198, 121)', 'rgb(65, 171, 93)',
+                                'rgb(35, 132, 67)',"rgb(0, 104, 55)", "white"]},
+        hoverinfo: 'none',
+        hole: .5,
+        type: 'pie',
+        showlegend: false
+        }];
+
+        var layout2 = {
+        shapes:[{
+            type: 'path',
+            path: path,
+            fillcolor: '850000',
+            line: {
+                color: '850000'
             }
-          ];
-          
-          var layout2 = {
-            width: 600,
-            height: 500,
-            margin: { t: 0, b: 0  },
-          };
-          
+            }],
+        title: { text: "<b>Belly Button Washing Frequency</b><br>Scrubs per Week", font: { size: 24 } },
+        height: 500,
+        width: 600,
+        xaxis: {zeroline:false, showticklabels:false,
+                    showgrid: false, range: [-1, 1]},
+        yaxis: {zeroline:false, showticklabels:false,
+                    showgrid: false, range: [-1, 1]}
+        };
+
         Plotly.newPlot('gauge', data2, layout2);
+        
+        // different type of gauge chart
+        // var data2 = [
+        //     {
+        //       type: "indicator",
+        //       mode: "gauge+number",
+        //       value: wfreq,
+        //       title: { text: "<b>Belly Button Washing Frequency</b><br>Scrubs per Week", font: { size: 24 } },
+        //       gauge: {
+        //         axis: { range: [null, 9], tickwidth: 1, dtick: 1},
+        //         bar: { color: "red", thickness: .1 },
+        //         steps: [
+        //           { range: [0, 1], color: 'rgb(255, 255, 229)'},
+        //           { range: [1, 2], color: "rgb(247, 252, 185)" },
+        //           { range: [2, 3], color: "rgb(255, 255, 229)" },
+        //           { range: [3, 4], color: "rgb(217, 240, 163)" },
+        //           { range: [4, 5], color: "rgb(173, 221, 142)" },
+        //           { range: [5, 6], color: "rgb(120, 198, 121)" },
+        //           { range: [6, 7], color: "rgb(65, 171, 93)" },
+        //           { range: [7, 8], color: "rgb(35, 132, 67)" },
+        //           { range: [8, 9], color: "rgb(0, 104, 55)"},
+        //         ],
+        //       }
+        //     }
+        //   ];
+          
+        //   var layout2 = {
+        //     width: 600,
+        //     height: 500,
+        //     margin: { t: 0, b: 0  },
+        //   };          
+        // Plotly.newPlot('gauge', data2, layout2);
         
         // Top10 Bar Chart
         var trace = {
