@@ -89,7 +89,7 @@ function barBubbleDemo(id) {
                 color: '850000'
             }
             }],
-        title: { text: "<b>Belly Button Washing Frequency</b><br>Scrubs per Week", font: { size: 24 } },
+        title: { text: "<b>Belly Button Washing Frequency</b><br>Scrubs per Week", font: { size: 17 } },
         height: 500,
         width: 600,
         xaxis: {zeroline:false, showticklabels:false,
